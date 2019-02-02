@@ -5,17 +5,15 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public final class MainApplication extends Application {
-    private final double DEFAULT_WIDTH = 500;
-    private final double DEFAULT_HEIGHT = 300;
 
     private Scene mainScene;
     private VoiceRecorderView voiceRecorderView;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        voiceRecorderView = new VoiceRecorderView();
+        voiceRecorderView = new VoiceRecorderView(new VoiceRecorderViewModel(primaryStage));
 
-        mainScene = new Scene(voiceRecorderView, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        mainScene = new Scene(voiceRecorderView);
 
         primaryStage.setResizable(false);
         primaryStage.setScene(mainScene);

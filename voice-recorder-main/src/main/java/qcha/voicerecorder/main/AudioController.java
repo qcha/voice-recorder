@@ -11,19 +11,18 @@ public class AudioController {
     private AudioSplitter audioSplitter;
     private volatile boolean isWorking = true;
 
-    public AudioController() {
+    public AudioController(int attempt, String dir) {
         try {
             waveAudioRecording = new WaveAudioRecording();
         } catch (LineUnavailableException e) {
             throw new RuntimeException(e);
         }
-        audioSplitter = new AudioSplitter();
+        audioSplitter = new AudioSplitter(attempt, dir);
     }
 
     public void startRecord() {
-        Thread recorder = new Thread(() -> waveAudioRecording.start());
         startStopWatch();
-        recorder.start();
+        waveAudioRecording.start();
     }
 
     public void stopRecord() {

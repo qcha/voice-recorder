@@ -8,7 +8,7 @@ import java.io.IOException;
 import static qcha.voicerecorder.main.Constants.*;
 
 @Slf4j
-public class WaveAudioRecording implements AutoCloseable {
+public class WaveAudioRecording extends Thread implements AutoCloseable {
     private TargetDataLine dataLine;
     private AudioInputStream audioStream;
 
@@ -20,6 +20,7 @@ public class WaveAudioRecording implements AutoCloseable {
         dataLine.open(AUDIO_FORMAT);
     }
 
+    @Override
     public void start() {
         log.debug("Start recording.");
         dataLine.start();

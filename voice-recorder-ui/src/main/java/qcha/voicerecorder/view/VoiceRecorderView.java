@@ -7,10 +7,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.DirectoryChooser;
 import lombok.extern.slf4j.Slf4j;
 import qcha.voicerecorder.main.AudioController;
 
-import javax.sound.sampled.LineUnavailableException;
+import java.io.File;
 
 @Slf4j
 public class VoiceRecorderView extends BorderPane {
@@ -18,23 +19,13 @@ public class VoiceRecorderView extends BorderPane {
     private Button stopBtn;
     private AudioController controller;
     private Label recordingLabel;
+    private VoiceRecorderViewModel voiceRecorderViewModel;
 
     private double length = 200;
 
-    public VoiceRecorderView() {
-        try {
-            controller = new AudioController();
-        } catch (Exception e) {
-            log.error("Error while initializing audio controller: {}", e);
+    public VoiceRecorderView(VoiceRecorderViewModel viewModel) {
+        this.voiceRecorderViewModel = viewModel;
 
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Ошибка инициализации микрофона");
-
-            alert.setHeaderText("Невозможно начать запись. Возможно, у вас не настроен микрофон?");
-
-            alert.showAndWait();
-            System.exit(-1);
-        }
         initButtons();
 
         recordingLabel = new Label("Идет запись");
@@ -52,12 +43,30 @@ public class VoiceRecorderView extends BorderPane {
             {
                 setPrefSize(length, length);
                 setGraphic(new ImageView(start));
-                setText("Запись");
-                setOnMouseClicked(e -> {
+                setOnMouseClicked(event -> {
                     setDisable(true);
                     stopBtn.setDisable(false);
                     recordingLabel.setVisible(true);
+
+                    DirectoryChooser directoryChooser = new DirectoryChooser();
+                    File directory = directoryChooser.showDialog(voiceRecorderViewModel.getStage());
+
+                    try {
+                        controller = new AudioController(voiceRecorderViewModel.getAttempt(), directory.getName());
+                    } catch (Exception ex) {
+                        log.error("Error while initializing audio controller: {}", ex);
+
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Ошибка инициализации микрофона");
+
+                        alert.setHeaderText("Невозможно начать запись. Возможно, у вас не настроен микрофон?");
+
+                        alert.showAndWait();
+                        System.exit(-1);
+                    }
+
                     controller.startRecord();
+                    voiceRecorderViewModel.increaseAttempt();
                 });
             }
         };
@@ -66,7 +75,6 @@ public class VoiceRecorderView extends BorderPane {
             {
                 setPrefSize(length, length);
                 setGraphic(new ImageView(stop));
-                setText("Остановка");
                 setDisable(true);
                 setOnMouseClicked(e -> {
                     setDisable(true);

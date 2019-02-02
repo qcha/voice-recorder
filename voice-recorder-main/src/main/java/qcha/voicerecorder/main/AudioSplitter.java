@@ -14,9 +14,13 @@ import static qcha.voicerecorder.main.Constants.*;
 @Slf4j
 public class AudioSplitter {
     private int frameSize;
+    private int attempt;
+    private String storageDir;
 
-    public AudioSplitter() {
+    public AudioSplitter(int attempt, String dir) {
         frameSize = AUDIO_FORMAT.getFrameSize();
+        this.attempt = attempt;
+        storageDir = dir;
     }
 
     public void split(int duration) {
@@ -32,14 +36,13 @@ public class AudioSplitter {
                     log.info(String.valueOf(bytes));
 
                     ais = new AudioInputStream(new ByteArrayInputStream(buf), AUDIO_FORMAT, bytes / frameSize);
-                    AudioSystem.write(ais, AUDIO_TYPE, new File(String.format("%s/rec%d.wav", DIR_NAME, i))); // todo change name
+                    AudioSystem.write(ais, AUDIO_TYPE, new File(storageDir, String.format("%d0%d.wav", attempt, i))); // todo change name
                     i++;
                 }
                 log.debug("Splitting is ended.");
             }
         } catch (UnsupportedAudioFileException | IOException e) {
-            // todo change error reaction
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 }
