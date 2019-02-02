@@ -21,7 +21,7 @@ public class WaveAudioRecording extends Thread implements AutoCloseable {
     }
 
     @Override
-    public void start() {
+    public void run() {
         log.debug("Start recording.");
         dataLine.start();
         audioStream = new AudioInputStream(dataLine);

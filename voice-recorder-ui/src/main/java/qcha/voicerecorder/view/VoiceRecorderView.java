@@ -52,7 +52,7 @@ public class VoiceRecorderView extends BorderPane {
                     File directory = directoryChooser.showDialog(voiceRecorderViewModel.getStage());
 
                     try {
-                        controller = new AudioController(voiceRecorderViewModel.getAttempt(), directory.getName());
+                        controller = new AudioController(voiceRecorderViewModel.getAttempt(), directory.getAbsolutePath());
                     } catch (Exception ex) {
                         log.error("Error while initializing audio controller: {}", ex);
 

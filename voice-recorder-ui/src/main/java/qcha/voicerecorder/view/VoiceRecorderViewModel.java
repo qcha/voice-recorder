@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 public class VoiceRecorderViewModel {
     private Stage stage;
-    private int attempt = 0;
+    private int attempt = 1;
 
     VoiceRecorderViewModel(Stage stage) {
         this.stage = stage;
