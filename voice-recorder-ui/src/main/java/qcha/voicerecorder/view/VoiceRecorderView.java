@@ -7,6 +7,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Font;
 import javafx.stage.DirectoryChooser;
 import lombok.extern.slf4j.Slf4j;
 import qcha.voicerecorder.main.AudioController;
@@ -28,7 +29,8 @@ public class VoiceRecorderView extends BorderPane {
 
         initButtons();
 
-        recordingLabel = new Label("Идет запись");
+        recordingLabel = new Label("Идет запись...");
+        recordingLabel.setFont(new Font("Cambria", 32));
         recordingLabel.setVisible(false);
 
         setTop(recordingLabel);
@@ -46,7 +48,6 @@ public class VoiceRecorderView extends BorderPane {
                 setOnMouseClicked(event -> {
                     setDisable(true);
                     stopBtn.setDisable(false);
-                    recordingLabel.setVisible(true);
 
                     DirectoryChooser directoryChooser = new DirectoryChooser();
                     File directory = directoryChooser.showDialog(voiceRecorderViewModel.getStage());
@@ -65,6 +66,7 @@ public class VoiceRecorderView extends BorderPane {
                         System.exit(-1);
                     }
 
+                    recordingLabel.setVisible(true);
                     controller.startRecord();
                     voiceRecorderViewModel.increaseAttempt();
                 });

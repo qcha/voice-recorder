@@ -15,21 +15,21 @@ import static qcha.voicerecorder.main.Constants.*;
 public class AudioSplitter {
     private int frameSize;
     private int attempt;
-    private String storageDir;
+    private File storageDir;
 
     public AudioSplitter(int attempt, String dir) {
         frameSize = AUDIO_FORMAT.getFrameSize();
         this.attempt = attempt;
-        storageDir = dir;
+        storageDir = new File(dir);
     }
 
     public void split(int duration) {
         try {
-            if (OUTPUT_FILE.exists()) {
+            if (storageDir.exists()) {
                 log.debug("Start splitting.");
                 byte[] buf = new byte[(int) (duration * FREQUENCY * frameSize)]; // the product is count of bytes in *time* seconds
                 int bytes, i = 0;
-                AudioInputStream mainFile = AudioSystem.getAudioInputStream(OUTPUT_FILE);
+                AudioInputStream mainFile = AudioSystem.getAudioInputStream(storageDir);
                 AudioInputStream ais;
 
                 while ((bytes = mainFile.read(buf)) > 0) {

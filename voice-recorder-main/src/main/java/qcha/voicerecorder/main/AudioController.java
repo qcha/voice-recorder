@@ -11,12 +11,8 @@ public class AudioController {
     private AudioSplitter audioSplitter;
     private volatile boolean isWorking = true;
 
-    public AudioController(int attempt, String dir) {
-        try {
-            waveAudioRecording = new WaveAudioRecording();
-        } catch (LineUnavailableException e) {
-            throw new RuntimeException(e);
-        }
+    public AudioController(int attempt, String dir) throws LineUnavailableException {
+        waveAudioRecording = new WaveAudioRecording(dir);
         audioSplitter = new AudioSplitter(attempt, dir);
     }
 
@@ -29,15 +25,11 @@ public class AudioController {
         isWorking = false;
         try {
             waveAudioRecording.close();
-            divideAudio();
+            audioSplitter.split(5);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
         //todo call SuggestionWindow
-    }
-
-    private void divideAudio() {
-        audioSplitter.split(5);
     }
 
     private void startStopWatch() {
