@@ -4,19 +4,15 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import static qcha.voicerecorder.main.Constants.DIR_NAME;
-
 public final class MainApplication extends Application {
-    private final double DEFAULT_WIDTH = 300;
-    private final double DEFAULT_HEIGHT = 150;
+    private final double DEFAULT_WIDTH = 500;
+    private final double DEFAULT_HEIGHT = 300;
 
     private Scene mainScene;
     private VoiceRecorderView voiceRecorderView;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        //Runtime.getRuntime().addShutdownHook(new Thread(() -> voiceRecorder.divideAudioFile()));
-
         voiceRecorderView = new VoiceRecorderView();
 
         mainScene = new Scene(voiceRecorderView, DEFAULT_WIDTH, DEFAULT_HEIGHT);
