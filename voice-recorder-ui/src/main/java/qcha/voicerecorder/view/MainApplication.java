@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import static qcha.voicerecorder.main.Constants.DIR_NAME;
 
 public final class MainApplication extends Application {
     private final double DEFAULT_WIDTH = 300;

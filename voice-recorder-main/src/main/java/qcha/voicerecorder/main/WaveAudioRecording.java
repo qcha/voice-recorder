@@ -1,35 +1,32 @@
 package qcha.voicerecorder.main;
 
+import lombok.extern.slf4j.Slf4j;
+
 import javax.sound.sampled.*;
-import java.io.File;
 import java.io.IOException;
 
-import static qcha.voicerecorder.main.Constants.FREQUENCY;
+import static qcha.voicerecorder.main.Constants.*;
 
-public class WaveAudioRecording extends Thread implements AutoCloseable {
+@Slf4j
+public class WaveAudioRecording implements AutoCloseable {
     private TargetDataLine dataLine;
     private AudioInputStream audioStream;
-    private AudioFileFormat.Type type = AudioFileFormat.Type.WAVE;
 
-    public WaveAudioRecording(String file) throws LineUnavailableException {
-        AudioFormat audioFormat = new AudioFormat(FREQUENCY, 16, 2, true, false);
-        DataLine.Info info = new DataLine.Info(TargetDataLine.class, audioFormat);
+
+    public WaveAudioRecording() throws LineUnavailableException {
+        DataLine.Info info = new DataLine.Info(TargetDataLine.class, AUDIO_FORMAT);
 
         dataLine = (TargetDataLine) AudioSystem.getLine(info);
-        dataLine.open(audioFormat);
-
-        audioStream = new AudioInputStream(dataLine);
+        dataLine.open(AUDIO_FORMAT);
     }
 
-    @Override
-    public void run() {
+    public void start() {
+        log.debug("Start recording.");
         dataLine.start();
+        audioStream = new AudioInputStream(dataLine);
 
         try {
-            AudioSystem.write(
-                    audioStream,
-                    type,
-                    new File("audiorec.wav"));
+            AudioSystem.write(audioStream, AUDIO_TYPE, OUTPUT_FILE);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -37,6 +34,7 @@ public class WaveAudioRecording extends Thread implements AutoCloseable {
 
     @Override
     public void close() throws Exception {
+        log.debug("Stop recording.");
         dataLine.stop();
         dataLine.close();
     }

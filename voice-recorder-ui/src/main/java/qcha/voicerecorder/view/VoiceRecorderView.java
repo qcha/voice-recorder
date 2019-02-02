@@ -3,28 +3,25 @@ package qcha.voicerecorder.view;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import qcha.voicerecorder.main.VoiceRecorder;
+import qcha.voicerecorder.main.AudioController;
+
+import javax.sound.sampled.LineUnavailableException;
 
 public class VoiceRecorderView extends BorderPane {
-    private VoiceRecorder voiceRecorder;
-
     private Button recordBtn;
     private Button stopBtn;
 
     private double length = 200;
 
     public VoiceRecorderView() {
-        EnterDirectoryWindow enterDirectoryWindow = new EnterDirectoryWindow();
-        enterDirectoryWindow.showAndWait();
-
-        voiceRecorder = new VoiceRecorder(enterDirectoryWindow.getDirName());
-
         initButtons();
 
         setCenter(new HBox(recordBtn, stopBtn));
     }
 
     private void initButtons() {
+        AudioController controller = new AudioController();
+
         recordBtn = new Button() {
             {
                 setPrefSize(length, length);
@@ -32,7 +29,7 @@ public class VoiceRecorderView extends BorderPane {
                 setOnMouseClicked(e -> {
                     setDisable(true);
                     stopBtn.setDisable(false);
-                    voiceRecorder.createAudioFile();
+                    controller.startRecord();
                 });
             }
         };
@@ -45,8 +42,7 @@ public class VoiceRecorderView extends BorderPane {
                 setOnMouseClicked(e -> {
                     setDisable(true);
                     recordBtn.setDisable(false);
-                    voiceRecorder.divideAudioFile();
-                    //todo call SuggestionWindow
+                    controller.stopRecord();
                 });
             }
         };
