@@ -21,6 +21,4 @@ public final class Constants {
     public final static File OUTPUT_FILE = new File(String.format("%s/audiorec.wav", DIR_NAME));
     public final static long TIMER = 600000;
     public final static AudioFileFormat.Type AUDIO_TYPE = AudioFileFormat.Type.WAVE;
-
-
 }

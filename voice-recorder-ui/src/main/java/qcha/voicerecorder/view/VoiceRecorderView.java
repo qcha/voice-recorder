@@ -1,5 +1,6 @@
 package qcha.voicerecorder.view;
 
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -10,18 +11,29 @@ import javax.sound.sampled.LineUnavailableException;
 public class VoiceRecorderView extends BorderPane {
     private Button recordBtn;
     private Button stopBtn;
+    private AudioController controller;
 
     private double length = 200;
 
     public VoiceRecorderView() {
+        try {
+            controller = new AudioController();
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Ошибка инициализации микрофона");
+
+            // alert.setHeaderText("Results:");
+            alert.setHeaderText("Невозможно начать запись. Возможно, у вас не настроен микрофон?");
+
+            alert.showAndWait();
+            System.exit(-1);
+        }
         initButtons();
 
         setCenter(new HBox(recordBtn, stopBtn));
     }
 
     private void initButtons() {
-        AudioController controller = new AudioController();
-
         recordBtn = new Button() {
             {
                 setPrefSize(length, length);
