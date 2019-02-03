@@ -46,29 +46,31 @@ public class VoiceRecorderView extends BorderPane {
                 setPrefSize(length, length);
                 setGraphic(new ImageView(start));
                 setOnMouseClicked(event -> {
-                    setDisable(true);
-                    stopBtn.setDisable(false);
-
                     DirectoryChooser directoryChooser = new DirectoryChooser();
                     File directory = directoryChooser.showDialog(voiceRecorderViewModel.getStage());
 
-                    try {
-                        controller = new AudioController(voiceRecorderViewModel.getAttempt(), directory.getAbsolutePath());
-                    } catch (Exception ex) {
-                        log.error("Error while initializing audio controller: {}", ex);
+                    if (directory != null) {
+                        setDisable(true);
+                        stopBtn.setDisable(false);
 
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Ошибка инициализации микрофона");
+                        try {
+                            controller = new AudioController(voiceRecorderViewModel.getAttempt(), directory.getAbsolutePath());
+                        } catch (Exception ex) {
+                            log.error("Error while initializing audio controller: {}", ex);
 
-                        alert.setHeaderText("Невозможно начать запись. Возможно, у вас не настроен микрофон?");
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Ошибка инициализации микрофона");
 
-                        alert.showAndWait();
-                        System.exit(-1);
+                            alert.setHeaderText("Невозможно начать запись. Возможно, у вас не настроен микрофон?");
+
+                            alert.showAndWait();
+                            System.exit(-1);
+                        }
+
+                        recordingLabel.setVisible(true);
+                        controller.startRecord();
+                        voiceRecorderViewModel.increaseAttempt();
                     }
-
-                    recordingLabel.setVisible(true);
-                    controller.startRecord();
-                    voiceRecorderViewModel.increaseAttempt();
                 });
             }
         };
