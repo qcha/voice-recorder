@@ -1,5 +1,9 @@
 package qcha.voicerecorder.view;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -9,6 +13,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.stage.DirectoryChooser;
+import javafx.util.Duration;
 import lombok.extern.slf4j.Slf4j;
 import qcha.voicerecorder.main.AudioController;
 
@@ -23,19 +28,41 @@ public class VoiceRecorderView extends BorderPane {
     private Label recordingLabel;
     private VoiceRecorderViewModel voiceRecorderViewModel;
 
+    private DoubleProperty timeSeconds = new SimpleDoubleProperty();
+    private Duration time = Duration.ZERO;
+    private Timeline timeline;
+    private Label timerLabel;
+
     private double length = 130;
 
     public VoiceRecorderView(VoiceRecorderViewModel viewModel) {
         this.voiceRecorderViewModel = viewModel;
 
         initButtons();
+        initLabel();
+        initTimer();
 
+        setTop(new HBox(recordingLabel, timerLabel));
+        setCenter(new HBox(recordBtn, stopBtn));
+    }
+
+    private void initTimer() {
+        timerLabel = new Label();
+        timerLabel.textProperty().bind(timeSeconds.asString());
+        timerLabel.setFont(new Font("Cambria", 32));
+        timeline = new Timeline(new KeyFrame(Duration.millis(100), t -> {
+            Duration duration = ((KeyFrame) t.getSource()).getTime();
+            time = time.add(duration);
+            timeSeconds.set(time.toSeconds());
+        })
+        );
+        timeline.setCycleCount(Timeline.INDEFINITE);
+    }
+
+    private void initLabel() {
         recordingLabel = new Label("Идет запись...");
         recordingLabel.setFont(new Font("Cambria", 32));
         recordingLabel.setVisible(false);
-
-        setTop(recordingLabel);
-        setCenter(new HBox(recordBtn, stopBtn));
     }
 
     private void initButtons() {
@@ -72,6 +99,7 @@ public class VoiceRecorderView extends BorderPane {
                         recordingLabel.setVisible(true);
                         controller.startRecord();
                         voiceRecorderViewModel.increaseAttempt();
+                        timeline.play();
                     }
                 });
             }
@@ -87,6 +115,8 @@ public class VoiceRecorderView extends BorderPane {
                     recordBtn.setDisable(false);
                     recordingLabel.setVisible(false);
                     controller.stopRecord();
+                    time = Duration.ZERO;
+                    timeline.stop();
                 });
             }
         };
