@@ -10,14 +10,13 @@ import static qcha.voicerecorder.main.Constants.DURATION;
 @Slf4j
 public class AudioController {
     private WaveAudioRecording waveAudioRecording;
-    private AudioSplitter audioSplitter;
     private File allAudio;
+    private int attempt;
 
     public AudioController(int attempt, String dir) throws LineUnavailableException {
-        allAudio = new File(dir, Constants.TMP_FILE_NAME);
+        allAudio = new File(dir, Constants.TMP_FILE_NAME_TEMPLATE + "_" + attempt + ".wav");
         waveAudioRecording = new WaveAudioRecording(allAudio);
-        audioSplitter = new AudioSplitter(attempt, allAudio);
-
+        this.attempt = attempt;
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             try {
@@ -33,13 +32,14 @@ public class AudioController {
     }
 
     public void stopRecord() {
-        try {
+        try(AudioSplitter splitter = new AudioSplitter(attempt, allAudio))  {
             waveAudioRecording.close();
-            audioSplitter.split(DURATION);
-            allAudio.delete();
+            splitter.split(DURATION);
         } catch (Exception e) {
             log.error("Ошибка при закрытии потока записи.");
             throw new RuntimeException(e);
         }
+
+        allAudio.delete();
     }
 }

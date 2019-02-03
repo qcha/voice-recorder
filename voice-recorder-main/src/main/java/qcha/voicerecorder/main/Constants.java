@@ -8,7 +8,7 @@ public final class Constants {
 
     }
 
-    public final static String TMP_FILE_NAME = "all.wav";
+    public final static String TMP_FILE_NAME_TEMPLATE = "all";
 
     public final static float FREQUENCY = 44100.0F;
 
