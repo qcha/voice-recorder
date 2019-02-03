@@ -14,6 +14,15 @@ public class WaveAudioRecording extends Thread implements AutoCloseable {
     private AudioInputStream audioStream;
     private File file;
 
+    {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            try {
+                close();
+            } catch (Exception e) {
+                throw new RuntimeException();
+            }
+        }));
+    }
 
     public WaveAudioRecording(String dir) throws LineUnavailableException {
         this.file = new File(dir, Constants.TMP_FILE_NAME);

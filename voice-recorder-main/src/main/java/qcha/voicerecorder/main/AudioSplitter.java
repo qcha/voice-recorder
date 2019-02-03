@@ -26,10 +26,11 @@ public class AudioSplitter {
     public void split(int duration) {
         try {
             if (storageDir.exists()) {
+                File tmpFile = new File(storageDir, Constants.TMP_FILE_NAME);
                 log.debug("Start splitting.");
                 byte[] buf = new byte[(int) (duration * FREQUENCY * frameSize)]; // the product is count of bytes in *time* seconds
                 int bytes, i = 0;
-                AudioInputStream mainFile = AudioSystem.getAudioInputStream(new File(storageDir, Constants.TMP_FILE_NAME));
+                AudioInputStream mainFile = AudioSystem.getAudioInputStream(tmpFile);
                 AudioInputStream ais;
 
                 while ((bytes = mainFile.read(buf)) > 0) {
@@ -40,6 +41,7 @@ public class AudioSplitter {
                     i++;
                 }
                 log.debug("Splitting is ended.");
+                tmpFile.delete();
             }
         } catch (UnsupportedAudioFileException | IOException e) {
             throw new RuntimeException(e);
