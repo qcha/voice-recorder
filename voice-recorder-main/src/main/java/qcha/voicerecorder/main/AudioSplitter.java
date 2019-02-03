@@ -8,6 +8,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 
 import static qcha.voicerecorder.main.Constants.*;
 
@@ -37,14 +38,18 @@ public class AudioSplitter {
                     log.info(String.valueOf(bytes));
 
                     ais = new AudioInputStream(new ByteArrayInputStream(buf), AUDIO_FORMAT, bytes / frameSize);
-                    AudioSystem.write(ais, AUDIO_TYPE, new File(storageDir, String.format("%d0%d.wav", attempt, i))); // todo change name
+                    AudioSystem.write(ais, AUDIO_TYPE, new File(storageDir, String.format("%d0%d.wav", attempt, i)));
                     i++;
                 }
                 log.debug("Splitting is ended.");
                 tmpFile.delete();
             }
-        } catch (UnsupportedAudioFileException | IOException e) {
+        } catch (UnsupportedAudioFileException e) {
+            log.error("Аудио-файл не поддерживается.");
             throw new RuntimeException(e);
+        } catch (IOException e) {
+            log.error("Ошибка при работе с файлом.");
+            throw new UncheckedIOException(e);
         }
     }
 }

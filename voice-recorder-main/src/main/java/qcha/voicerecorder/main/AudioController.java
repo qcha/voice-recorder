@@ -1,12 +1,11 @@
 package qcha.voicerecorder.main;
 
-import org.apache.commons.lang3.time.StopWatch;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.sound.sampled.LineUnavailableException;
 
 import static qcha.voicerecorder.main.Constants.DURATION;
-import static qcha.voicerecorder.main.Constants.TIMER;
-
+@Slf4j
 public class AudioController {
     private WaveAudioRecording waveAudioRecording;
     private AudioSplitter audioSplitter;
@@ -25,8 +24,8 @@ public class AudioController {
             waveAudioRecording.close();
             audioSplitter.split(DURATION);
         } catch (Exception e) {
+            log.error("Ошибка при закрытии потока записи.");
             throw new RuntimeException(e);
         }
-        //todo call SuggestionWindow
     }
 }

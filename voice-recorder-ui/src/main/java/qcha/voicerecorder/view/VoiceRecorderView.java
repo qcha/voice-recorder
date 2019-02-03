@@ -12,6 +12,7 @@ import javafx.stage.DirectoryChooser;
 import lombok.extern.slf4j.Slf4j;
 import qcha.voicerecorder.main.AudioController;
 
+import javax.sound.sampled.LineUnavailableException;
 import java.io.File;
 
 @Slf4j
@@ -54,8 +55,9 @@ public class VoiceRecorderView extends BorderPane {
                         stopBtn.setDisable(false);
 
                         try {
-                            controller = new AudioController(voiceRecorderViewModel.getAttempt(), directory.getAbsolutePath());
-                        } catch (Exception ex) {
+                            controller = new AudioController(voiceRecorderViewModel.getAttempt(),
+                                    directory.getAbsolutePath());
+                        } catch (LineUnavailableException ex) {
                             log.error("Error while initializing audio controller: {}", ex);
 
                             Alert alert = new Alert(Alert.AlertType.ERROR);
