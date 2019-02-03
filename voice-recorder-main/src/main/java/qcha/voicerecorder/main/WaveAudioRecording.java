@@ -26,8 +26,8 @@ public class WaveAudioRecording extends Thread implements AutoCloseable {
         }));
     }
 
-    public WaveAudioRecording(String dir) throws LineUnavailableException {
-        this.file = new File(dir, Constants.TMP_FILE_NAME);
+    public WaveAudioRecording(File allAudio) throws LineUnavailableException {
+        this.file = allAudio;
         DataLine.Info info = new DataLine.Info(TargetDataLine.class, AUDIO_FORMAT);
 
         dataLine = (TargetDataLine) AudioSystem.getLine(info);
