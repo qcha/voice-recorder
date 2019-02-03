@@ -8,6 +8,8 @@ public final class Constants {
 
     }
 
+    public final static String TMP_FILE_NAME = "all.wav";
+
     public final static float FREQUENCY = 44100.0F;
 
     public final static AudioFormat AUDIO_FORMAT = new AudioFormat(FREQUENCY, 16, 2, true, false);

@@ -29,7 +29,7 @@ public class AudioSplitter {
                 log.debug("Start splitting.");
                 byte[] buf = new byte[(int) (duration * FREQUENCY * frameSize)]; // the product is count of bytes in *time* seconds
                 int bytes, i = 0;
-                AudioInputStream mainFile = AudioSystem.getAudioInputStream(storageDir);
+                AudioInputStream mainFile = AudioSystem.getAudioInputStream(new File(storageDir, Constants.TMP_FILE_NAME));
                 AudioInputStream ais;
 
                 while ((bytes = mainFile.read(buf)) > 0) {
