@@ -28,7 +28,7 @@ public class AudioController {
         try {
             waveAudioRecording.close();
             audioSplitter.split(DURATION);
-            FileUtils.forceDelete(allAudio);
+            allAudio.delete();
         } catch (Exception e) {
             log.error("Ошибка при закрытии потока записи.");
             throw new RuntimeException(e);
