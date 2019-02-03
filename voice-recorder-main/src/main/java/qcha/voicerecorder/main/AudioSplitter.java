@@ -28,7 +28,6 @@ public class AudioSplitter {
 
     public void split(int duration) {
         if (storageDir.exists()) {
-            tmpFile = new File(storageDir, Constants.TMP_FILE_NAME);
 
             log.debug("Start splitting.");
             byte[] buf = new byte[(int) (duration * FREQUENCY * frameSize)]; // the product is count of bytes in *time* seconds
