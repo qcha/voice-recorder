@@ -1,7 +1,6 @@
 package qcha.voicerecorder.main;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
 
 import javax.sound.sampled.LineUnavailableException;
 import java.io.File;
@@ -18,6 +17,15 @@ public class AudioController {
         allAudio = new File(dir, Constants.TMP_FILE_NAME);
         waveAudioRecording = new WaveAudioRecording(allAudio);
         audioSplitter = new AudioSplitter(attempt, allAudio);
+
+
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            try {
+                waveAudioRecording.close();
+            } catch (Exception e) {
+                throw new RuntimeException();
+            }
+        }));
     }
 
     public void startRecord() {

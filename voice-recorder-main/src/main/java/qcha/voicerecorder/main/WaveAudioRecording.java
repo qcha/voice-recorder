@@ -1,7 +1,6 @@
 package qcha.voicerecorder.main;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
 
 import javax.sound.sampled.*;
 import java.io.File;
@@ -15,16 +14,6 @@ public class WaveAudioRecording extends Thread implements AutoCloseable {
     private TargetDataLine dataLine;
     private AudioInputStream audioStream;
     private File file;
-
-    {
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            try {
-                close();
-            } catch (Exception e) {
-                throw new RuntimeException();
-            }
-        }));
-    }
 
     public WaveAudioRecording(File allAudio) throws LineUnavailableException {
         this.file = allAudio;
