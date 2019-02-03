@@ -22,7 +22,7 @@ public class VoiceRecorderView extends BorderPane {
     private Label recordingLabel;
     private VoiceRecorderViewModel voiceRecorderViewModel;
 
-    private double length = 200;
+    private double length = 130;
 
     public VoiceRecorderView(VoiceRecorderViewModel viewModel) {
         this.voiceRecorderViewModel = viewModel;
