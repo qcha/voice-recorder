@@ -18,7 +18,10 @@ public class WaveAudioRecording extends Thread implements AutoCloseable {
     {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             try {
-                close();
+                if (file.exists()) {
+                    log.error("File will not be saved.");
+                    close();
+                }
             } catch (Exception e) {
                 throw new RuntimeException();
             }

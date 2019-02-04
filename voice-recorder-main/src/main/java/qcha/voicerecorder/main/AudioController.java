@@ -18,14 +18,6 @@ public class AudioController {
         allAudio = new File(dir, Constants.TMP_FILE_NAME_TEMPLATE + "_" + attempt + ".wav");
         waveAudioRecording = new WaveAudioRecording(allAudio);
         this.attempt = attempt;
-
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            try {
-                waveAudioRecording.close();
-            } catch (Exception e) {
-                throw new RuntimeException();
-            }
-        }));
     }
 
     public void startRecord() {
