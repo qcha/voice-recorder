@@ -2,8 +2,10 @@ package qcha.voicerecorder.view;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.beans.binding.StringBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -11,6 +13,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.text.Font;
 import javafx.stage.DirectoryChooser;
 import javafx.util.Duration;
@@ -33,7 +36,7 @@ public class VoiceRecorderView extends BorderPane {
     private Timeline timeline;
     private Label timerLabel;
 
-    private double length = 130;
+    private double length = 135;
 
     public VoiceRecorderView(VoiceRecorderViewModel viewModel) {
         this.voiceRecorderViewModel = viewModel;
@@ -42,14 +45,15 @@ public class VoiceRecorderView extends BorderPane {
         initLabel();
         initTimer();
 
-        setTop(new HBox(recordingLabel, timerLabel));
+        setTop(recordingLabel);
         setCenter(new HBox(recordBtn, stopBtn));
+        setBottom(timerLabel);
     }
 
     private void initTimer() {
         timerLabel = new Label();
-        timerLabel.textProperty().bind(timeSeconds.asString());
-        timerLabel.setFont(new Font("Cambria", 32));
+        timerLabel.textProperty().bind(timeSeconds.asString("%s секунд"));
+        timerLabel.setFont(new Font("Cambria", 30));
         timeline = new Timeline(new KeyFrame(Duration.millis(100), t -> {
             Duration duration = ((KeyFrame) t.getSource()).getTime();
             time = time.add(duration);
@@ -61,7 +65,7 @@ public class VoiceRecorderView extends BorderPane {
 
     private void initLabel() {
         recordingLabel = new Label("Идет запись...");
-        recordingLabel.setFont(new Font("Cambria", 32));
+        recordingLabel.setFont(new Font("Cambria", 30));
         recordingLabel.setVisible(false);
     }
 
