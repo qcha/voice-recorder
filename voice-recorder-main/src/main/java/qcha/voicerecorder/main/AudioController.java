@@ -32,7 +32,7 @@ public class AudioController {
     }
 
     public void stopRecord() {
-        try(AudioSplitter splitter = new AudioSplitter(attempt, allAudio))  {
+        try (AudioSplitter splitter = new AudioSplitter(attempt, allAudio)) {
             waveAudioRecording.close();
             splitter.split(DURATION);
         } catch (Exception e) {
