@@ -21,6 +21,8 @@ import qcha.voicerecorder.main.AudioController;
 import javax.sound.sampled.LineUnavailableException;
 import java.io.File;
 
+import static qcha.voicerecorder.main.Constants.TIMER;
+
 @Slf4j
 public class VoiceRecorderView extends BorderPane {
     private Button recordBtn;
@@ -57,6 +59,10 @@ public class VoiceRecorderView extends BorderPane {
             Duration duration = ((KeyFrame) t.getSource()).getTime();
             time = time.add(duration);
             timeSeconds.set(time.toSeconds());
+            if (Math.abs(time.toSeconds() - TIMER) < 1E-6){ // compare doubles
+                log.info("Timer over.");
+                stopBtn.fire();
+            }
         })
         );
         timeline.setCycleCount(Timeline.INDEFINITE);
@@ -76,7 +82,7 @@ public class VoiceRecorderView extends BorderPane {
             {
                 setPrefSize(length, length);
                 setGraphic(new ImageView(start));
-                setOnMouseClicked(event -> {
+                setOnAction(event -> {
                     DirectoryChooser directoryChooser = new DirectoryChooser();
                     File directory = directoryChooser.showDialog(voiceRecorderViewModel.getStage());
 
@@ -113,7 +119,7 @@ public class VoiceRecorderView extends BorderPane {
                 setPrefSize(length, length);
                 setGraphic(new ImageView(stop));
                 setDisable(true);
-                setOnMouseClicked(e -> {
+                setOnAction(e -> {
                     setDisable(true);
                     recordBtn.setDisable(false);
                     recordingLabel.setVisible(false);

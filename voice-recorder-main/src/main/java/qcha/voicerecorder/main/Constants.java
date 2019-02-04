@@ -13,7 +13,7 @@ public final class Constants {
     public final static float FREQUENCY = 44100.0F;
 
     public final static AudioFormat AUDIO_FORMAT = new AudioFormat(FREQUENCY, 16, 2, true, false);
-    public final static long TIMER = 600000;
+    public final static long TIMER = 420;
     public final static AudioFileFormat.Type AUDIO_TYPE = AudioFileFormat.Type.WAVE;
     public final static int DURATION = 5;
 }
