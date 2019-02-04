@@ -14,6 +14,7 @@ public class AudioController {
     private int attempt;
 
     public AudioController(int attempt, String dir) throws LineUnavailableException {
+        log.debug("Temp file is created.");
         allAudio = new File(dir, Constants.TMP_FILE_NAME_TEMPLATE + "_" + attempt + ".wav");
         waveAudioRecording = new WaveAudioRecording(allAudio);
         this.attempt = attempt;
@@ -40,6 +41,10 @@ public class AudioController {
             throw new RuntimeException(e);
         }
 
-        allAudio.delete();
+        if (allAudio.delete()) {
+            log.debug("Temp file is deleted.");
+        } else {
+            log.error("Can't delete temp file.");
+        }
     }
 }
