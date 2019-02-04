@@ -18,6 +18,6 @@ public final class MainApplication extends Application {
         primaryStage.setResizable(false);
         primaryStage.setScene(mainScene);
         primaryStage.show();
-
+        primaryStage.setOnCloseRequest(e -> System.exit(0));
     }
 }
