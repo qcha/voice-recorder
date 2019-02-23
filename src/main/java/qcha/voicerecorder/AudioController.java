@@ -1,11 +1,11 @@
-package qcha.voicerecorder.main;
+package qcha.voicerecorder;
 
 import lombok.extern.slf4j.Slf4j;
 
 import javax.sound.sampled.LineUnavailableException;
 import java.io.File;
 
-import static qcha.voicerecorder.main.Constants.DURATION;
+import static qcha.voicerecorder.Constants.DURATION;
 
 @Slf4j
 public class AudioController {

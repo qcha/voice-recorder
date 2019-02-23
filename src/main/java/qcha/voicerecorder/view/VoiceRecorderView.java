@@ -16,12 +16,12 @@ import javafx.scene.text.Font;
 import javafx.stage.DirectoryChooser;
 import javafx.util.Duration;
 import lombok.extern.slf4j.Slf4j;
-import qcha.voicerecorder.main.AudioController;
+import qcha.voicerecorder.AudioController;
 
 import javax.sound.sampled.LineUnavailableException;
 import java.io.File;
 
-import static qcha.voicerecorder.main.Constants.TIMER;
+import static qcha.voicerecorder.Constants.TIMER;
 
 @Slf4j
 public class VoiceRecorderView extends BorderPane {
